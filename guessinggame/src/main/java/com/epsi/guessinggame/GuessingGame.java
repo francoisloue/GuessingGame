@@ -1,3 +1,5 @@
+package com.epsi.guessinggame;
+
 import java.util.Scanner;
 import java.util.Random;
 import java.sql.Connection;
@@ -32,15 +34,21 @@ public class GuessingGame {
             guess = scanner.nextInt();
             numberOfTries++;
 
-            if (guess < 1 || guess > 100) {
-                System.out.println("Votre devinette est hors des limites. Essayez un nombre entre 1 et 100.");
-            } else if (guess < numberToGuess) {
-                System.out.println("Votre devinette est trop basse.");
-            } else if (guess > numberToGuess) {
-                System.out.println("Votre devinette est trop élevée.");
-            } else {
-                win = true;
-            }
+            String userGuess = checkGuess(guess, numberToGuess);
+            switch (userGuess) {
+                case "too_low":
+                    System.out.println("Votre devinette est trop basse.");
+                    break;
+                case "too_high":
+                    System.out.println("Votre devinette est trop élevée.");
+                    break;
+                case "out_of_bound":
+                    System.out.println("Votre devinette est hors des limites. Essayez un nombre entre 1 et 100.");
+                    break;
+                default:
+                    win = true;
+                    break;
+            };
         }
 
         System.out.println("Félicitations ! Vous avez deviné le nombre " + numberToGuess + " en " + numberOfTries + " tentatives.");
@@ -63,4 +71,17 @@ public class GuessingGame {
             e.printStackTrace();
         }
     }
+
+    public static String checkGuess(int guess, int numberToGuess) {
+        if (guess < 1 || guess > 100) {
+            return "out_of_bounds";
+        } else if (guess < numberToGuess) {
+            return "too_low";
+        } else if (guess > numberToGuess) {
+            return "too_high";
+        } else {
+            return "correct";
+        }
+    }
+
 }
